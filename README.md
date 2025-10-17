@@ -1,10 +1,10 @@
 
 ---
 
-## ⚙️ **Backend: B-Library API (Express + MongoDB + JWT)**
+## **Backend: B-Library API (Express + MongoDB + JWT)**
 
 ```markdown
-# 🧠 B-Library Backend API
+# B-Library Backend API
 
 The **backend** for the B-Library project — built with **Node.js**, **Express**, and **MongoDB**.  
 It powers all book, order, and authentication features used by the Admin Routes.
@@ -47,6 +47,7 @@ git clone https://github.com/yourusername/b-library-backend.git
 cd b-library-backend
 npm install
 npm run dev
+
 
 
 
