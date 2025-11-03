@@ -1,34 +1,39 @@
 const express = require("express");
-
+const { v2: cloudinary } = require("cloudinary");
 const Book = require("../Models/Books/bookmodel");
+require("dotenv").config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
 //post/create book controller
 const PostBook = async (req, res) => {
   try {
-    const newBook = await Book({ ...req.body });
+    const newBook = new Book({
+      title: req.body.title,
+      description: req.body.description,
+      category: req.body.category,
+      coverImage: req.body.coverImage, // From Cloudinary
+      oldPrice: req.body.oldPrice,
+      newPrice: req.body.newPrice,
+    });
+
     await newBook.save();
-    res.status(202).json({ message: "book saved successfully", book: newBook });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "some error occured",
-    });
-  }
-};
-const getAllBook = async (req, res) => {
-  try {
-    const books = await Book.find().sort({ createdAt: -1 });
-    res.status(200).json({
+
+    res.status(201).json({
       success: true,
-      message: "all books posted successfully",
-      Book: books,
+      message: "Book saved successfully",
+      book: newBook,
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error saving book:", error);
     res.status(500).json({
       success: false,
-      message: "some error occured",
-      error,
+      message: "Error occurred while saving book",
+      error: error.message,
     });
   }
 };
@@ -61,7 +66,21 @@ const getSingleBook = async (req, res) => {
     });
   }
 };
-
+const getAllBook = async (req, res) => {
+  try {
+    const books = await Book.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      message: "all books posted successfully",
+      Book: books,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ success: false, message: "some error occured", error });
+  }
+};
 //update Book
 const UpdateBook = async (req, res) => {
   try {

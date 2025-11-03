@@ -10,16 +10,26 @@ const bookSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    category: {},
+    category: {
+      type: String, // or Array if multiple categories
+      required: true,
+    },
     coverImage: {
       type: String,
-      require: true,
+      required: true, // Fixed typo: was "require"
     },
-    oldPrice: Number,
-    newPrice: Number,
+    oldPrice: {
+      type: Number,
+      required: true,
+    },
+    newPrice: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
+
 const Book = mongoose.model("Book", bookSchema);
 
 module.exports = Book;

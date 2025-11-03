@@ -10,9 +10,11 @@ const {
 
 const verifyAdminToken = require("../middlewares/Auth");
 const router = express.Router();
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 //post a book.post for submitting
-router.post("/create-book", PostBook);
+router.post("/create-book", upload.single("image"), PostBook);
 //get all books
 router.get("/", getAllBook);
 //get single books
