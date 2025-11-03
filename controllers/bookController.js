@@ -11,12 +11,30 @@ cloudinary.config({
 
 //post/create book controller
 const PostBook = async (req, res) => {
+  let coverImageUrl = req.body.coverImage; // Fallback to req.body if no file is uploaded
+
   try {
+    //  Check for file and upload it
+    if (req.file) {
+      console.log("File detected, uploading to Cloudinary...");
+
+      const uploadOptions = {
+        folder: "book_covers", // Recommended: Organize your assets
+        resource_type: "auto",
+      };
+
+      const uploadResult = await uploadStream(req.file.buffer, uploadOptions);
+
+      // Use the secure URL returned by Cloudinary
+      coverImageUrl = uploadResult.secure_url;
+    }
+
     const newBook = new Book({
       title: req.body.title,
       description: req.body.description,
       category: req.body.category,
-      coverImage: req.body.coverImage, // From Cloudinary
+
+      coverImage: coverImageUrl,
       oldPrice: req.body.oldPrice,
       newPrice: req.body.newPrice,
     });

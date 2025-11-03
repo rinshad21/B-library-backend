@@ -11,7 +11,8 @@ const {
 const verifyAdminToken = require("../middlewares/Auth");
 const router = express.Router();
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 //post a book.post for submitting
 router.post("/create-book", upload.single("image"), PostBook);
